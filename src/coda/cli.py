@@ -103,7 +103,10 @@ async def _transcribe_and_infer(transcriber, grounder, agent, chunk_id, audio,
     transcription_s = round(time.perf_counter() - t, 3)
     annotations, grounding_s = _ground(grounder, text)
     inference, inference_s = await _infer(agent, chunk_id, text, annotations, ts)
-    timings = {"transcription_s": transcription_s, "grounding_s": grounding_s,
+    # audio_s is the spoken length of this chunk (the "wall clock" the live
+    # system would have advanced by); not present on the text path.
+    timings = {"audio_s": round(len(audio) / SAMPLE_RATE, 3),
+               "transcription_s": transcription_s, "grounding_s": grounding_s,
                "inference_s": inference_s}
     return chunk_id, text, annotations, inference, timings
 
@@ -208,12 +211,17 @@ def write_outputs(output_dir: Path, full_text: str, per_chunk: list, meta: dict)
         annotations.extend(a.to_json() for a in anns)
     (output_dir / "annotations.json").write_text(json.dumps(annotations, indent=2))
 
-    # Per-chunk trace (transcript + causes + timing), useful mainly in chunked mode
+    # Per-chunk trace (transcript + causes + timing), useful mainly in chunked mode.
+    # audio_elapsed_s is the cumulative spoken time at the end of each chunk: the
+    # simulated "wall clock" of the interview, driven by audio length not compute.
+    audio_elapsed_s = 0.0
     with (output_dir / "chunks.jsonl").open("w") as fh:
         for chunk_id, text, anns, inf, timings in per_chunk:
+            audio_elapsed_s = round(audio_elapsed_s + timings.get("audio_s", 0.0), 3)
             fh.write(json.dumps({
                 "chunk_id": chunk_id,
                 "timestamp": inf.get("timestamp"),
+                "audio_elapsed_s": audio_elapsed_s,
                 "text": text,
                 "annotations": [a.to_json() for a in anns],
                 "causes": inf.get("causes", {}),
@@ -226,8 +234,10 @@ def write_outputs(output_dir: Path, full_text: str, per_chunk: list, meta: dict)
     transcription_s = round(sum(t.get("transcription_s", 0) for *_, t in per_chunk), 3)
     grounding_s = round(sum(t.get("grounding_s", 0) for *_, t in per_chunk), 3)
     inference_s = round(sum(t.get("inference_s", 0) for *_, t in per_chunk), 3)
+    audio_processed_s = round(sum(t.get("audio_s", 0) for *_, t in per_chunk), 3)
     audio_s = meta.get("audio_duration_s") or 0
     timing = {
+        "audio_processed_s": audio_processed_s,
         "transcription_s": transcription_s,
         "grounding_s": grounding_s,
         "inference_s": inference_s,

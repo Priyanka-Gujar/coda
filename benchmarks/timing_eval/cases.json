@@ -1,0 +1,58 @@
+[
+  {
+    "case_id": "case_01",
+    "topic": "Measles complicated by bacterial pneumonia",
+    "source_url": "https://live-champs-new.pantheonsite.io/resource/a-child-who-died-of-a-notifiable-vaccine-preventable-disease-complicated-by-bacterial-pneumonia/",
+    "va_narrative": "A 3-year-old female died at home Her death followed that of a younger sibling Both children were not up to date on vaccinations. Five days prior to death, she developed a fever, followed by three days of chest pain, a cough and rash, and one day of loose stool and convulsions. This led the family to seek care from a local a community referral center where she was admitted for 2 days and discharged with prescriptions for an antibiotic, amoxicillin and other medications to help manage her symptoms. The following morning, her parents also sought and administered a traditional therapy. The child passed away the next evening at home.",
+    "clinical_narrative": "CHAMPS technicians noted disseminated black spots on the skin during the Minimally Invasive Tissue Sampling (MITS) procedure. Molecular diagnostic tests detected measles virus in blood, cerebrospinal fluid (CSF), lung, and nasopharyngeal samples. Pathologists found bronchopneumonia from samples of the lungs, with immunohistochemical (IHC) evidence of Streptococcus spp. and Haemophilus influenzae.",
+    "expected_cause": "Measles"
+  },
+  {
+    "case_id": "case_02",
+    "topic": "Streptococcus pneumoniae",
+    "source_url": "https://champshealth.org/resource/a-child-who-died-of-a-notifiable-vaccine-preventable-disease-complicated-by-bacterial-pneumonia/",
+    "va_narrative": "An 8-month old baby girl died at home after 3 days of vomiting and diarrhea, 5 days of poor feeding, 15 days of fever and cough, and 30 days of general illness. She was followed by the local health clinic for severe acute malnutrition and had been on nutritional supplements for two months with no information on clinical progress. She was not immunized.",
+    "clinical_narrative": "On examination, she had a respiratory rate of 42 breaths per minute, heart rate of 150 beats per minute, and temperature of 36.2°C. Laboratory tests, including Taqman Array Card (TAC) and immunohistochemistry, showed the presence of Streptococcus pneumoniae, which causes serious bacterial infections. Blood and spinal fluid also revealed presence of measles, but there was no sign of rash or measles pneumonia that suggested acute infection.",
+    "expected_cause": "Lower respiratory infections"
+  },
+  {
+    "case_id": "case_03",
+    "topic": "Malnutrition and respiratory infection and HIV",
+    "source_url": "https://live-champs-new.pantheonsite.io/resource/an-infant-with-severe-malnutrition-who-died-at-home-with-a-respiratory-infection-led-to-the-diagnosis-of-pneumonia-and-found-a-previously-unknown-hiv-infection/",
+    "va_narrative": "A 6-month-old baby girl died at home after a week of fever, trouble breathing and cold extremities. She had not been growing well for over three months. When she died, she weighed less than when she was born. Immunisation was up to date for age Over several months and even up to one week before she died, her family sought answers from different health facilities and a traditional healer, although the baby was never hospitalized. The family did not know what was wrong.",
+    "clinical_narrative": "After her death the baby’s blood tested positive for human immunodeficiency virus (HIV). Her mother had been tested for HIV five months prior to the baby’s birth and was negative. She did not have testing again later during pregnancy when she must have acquired the infection. She was not on any medications that could have prevented her from passing HIV to her daughter. By measuring the baby’s weight after death, the child was shown to have been severely malnourished, In addition, pathology examination showed that her liver was holding onto extra fat cells, a change called steatosis, which can be a sign of malnutrition. CHAMPS testing showed that the baby’s pneumonia was caused by a serious bacterial infection, Streptococcus pneumoniae, along with two viruses, cytomegalovirus and respiratory syncytial virus. Evidence of all of these pathogens were found in the baby’s lung tissue.",
+    "expected_cause": "HIV"
+  },
+  {
+    "case_id": "case_04",
+    "topic": "Malnutrition, malaria and pneumonia",
+    "source_url": "https://live-champs-new.pantheonsite.io/resource/a-severely-malnourished-child-who-died-from-overwhelming-bacterial-infection-complicated-by-malaria-and-anemia/",
+    "va_narrative": "A one-year, eight-month-old female was referred to a regional hospital after two weeks of fever, cough, restlessness, loss of appetite, mouth ulcers, diarrhea, and skin rash. Four days prior, her parents had taken her to a small community health facility where she was treated with antibiotics and pain medication. The mother reported that the child was not brought immediately to the regional hospital because they did not have money for admission and she had hoped to see improvement from treatment received at the community facility. The mother also said she purchased tablets at a pharmacy before visiting the facility to treat the child but could not recall the name of the medication. Unfortunately, neither the community health facility treatment nor the tablets improved the child’s symptoms.",
+    "clinical_narrative": "On admission, the child tested positive for malaria via a Rapid Diagnostic Test. Hemoglobin testing indicated that she was anemic. She was subsequently treated for both conditions but ultimately succumbed just 12 hours after hospital admission. Laboratory tests revealed presence of a lung infection caused by Klebsiella pneumoniae. This bacterium was also found in samples of the child’s blood and cerebrospinal fluid. Liver specimens showed an accumulation of extra fat cells, which is often indicative of malnutrition",
+    "expected_cause": "Sepsis"
+  },
+  {
+    "case_id": "case_05",
+    "topic": "Measles complicated by bacterial infection (Proteus spp)",
+    "source_url": "https://live-champs-new.pantheonsite.io/resource/a-neonate-who-died-of-sepsis-complicated-by-measles-infection/",
+    "va_narrative": "A 19-day old male who was born early (at 35 weeks’ gestation) died after being hospitalized for just over one day with fever and breathlessness. The reasons for his prematurity are not known. There is limited documentation of prenatal care, but his mother had oligohydramnios, or lack of amniotic fluid around the baby. Her membranes ruptured (her “water broke”) five weeks-early. The baby was born via vaginal delivery, and foul-smelling fluid was noted at the time of birth. At delivery, he did not cry right away and required resuscitation and hospital admission",
+    "clinical_narrative": "He was readmitted to the hospital on day 18, with breathlessness and fever for two days. He weighed just 1420g. He was lethargic, cyanotic or blue in color, had irregular breathing, a low heart rate, fever, and a distended abdomen despite severe wasting. Doctors started antibiotics and provided respiratory support. He did not improve, developed seizures, ultimately stopped breathing and did not respond to cardiopulmonary resuscitation. post-mortem blood and cerebrospinal fluid cultures were both positive for Proteus spp., a bacteria that causes infection. Post-mortem testing unexpectedly found measles from 4 different sites throughout the baby’s tissues, blood, and cerebrospinal fluid. Pathologist examination of tissues confirmed that the baby had inflammation and viral pneumonia in the lungs with signs of measles, including syncytial giant cells and intranuclear inclusions. Respiratory Syncytial Virus, was negative",
+    "expected_cause": "Neonatal sepsis"
+  },
+  {
+    "case_id": "case_06",
+    "topic": "Malnutrition, gastroenteritis and sepsis",
+    "source_url": "https://live-champs-new.pantheonsite.io/resource/a-malnourished-infant-that-died-with-hiv-complicated-by-gastroenteritis-and-sepsis-caused-by-bacterial-and-fungal-infections/",
+    "va_narrative": "A 1-year-old baby with a history of tuberculosis (TB) was undergoing treatment when she became ill with a fever, cough, frequent stool, and lack of appetite. The baby’s symptoms did not stop despite treatment at home, so after 3 days, her mother decided to take her to an urban health facility.",
+    "clinical_narrative": "On examination she had generalized body wasting and visible prominence of ribs and other bones. She was diagnosed with Severe Acute Malnutrition and was admitted for further management. Her condition worsened during her hospitalization despite nutritional support and antibiotic treatment, prompting concern of another unknown underlying condition. She was tested and confirmed positive for HIV and died a few days later. After the infant’s death, the mother confided that she was HIV positive and taking antiretrovirals; she initially kept her status private. laboratory tests confirmed her positive HIV status. Pathology test results showed that her liver had decreased bile flow, or cholestasis, and had undergone fatty changes, further indicating malnutrition as well as infection. Additional laboratory tests also revealed a mixed bacterial and fungal infection in the lungs caused by Klebsiella pneumoniae and Candida albicans. These pathogens were found in both lung tissue and blood samples.",
+    "expected_cause": "HIV"
+  },
+  {
+    "case_id": "case_07",
+    "topic": "Stillbirth",
+    "source_url": "https://live-champs-new.pantheonsite.io/resource/a-stillbirth-caused-by-lack-of-oxygen-as-a-result-of-prolonged-obstructed-labor-due-to-congenital-malformation/",
+    "va_narrative": "A seemingly uncomplicated delivery resulted in the death of mother and baby. The mother went into labor at 36 weeks in her home at 18:00 in the evening. In the morning, the family proceeded to the hospital, and by early afternoon the delivery seemed to be progressing normally. The baby presented as breech, and its body was delivered without difficulty; however, the head and shoulders became stuck, and no maneuvering could complete the delivery. The mother was moved to an operating room, but both the doctor and surgical attendant were unavailable. This delay in delivery resulted in prolonged absence of oxygen to the baby and subsequent intrapartum demise. After several hours, vaginal delivery was completed when the surgical attendant arrived. Unfortunately, the mother experienced a massive postpartum hemorrhage. An immediate blood transfusion was initiated, but the mother died during resuscitation.",
+    "clinical_narrative": "Examination of the baby revealed a congenital malformation of the baby’s head known as hydrocephalus, meaning the baby’s head was enlarged due to a buildup of cerebrospinal fluid. The skull had been fractured during labor manipulations. Pathology findings in the liver showed a paucity working bile ducts. A marked decrease in the amount of bile ducts, combined with hydrocephalus may be indicative of a genetic disorder.",
+    "expected_cause": "Perinatal asphyxia/hypoxia"
+  }
+]

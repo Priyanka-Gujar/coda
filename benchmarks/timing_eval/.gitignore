@@ -1,0 +1,6 @@
+# Generated artifacts (reproducible from the scripts + cases.json)
+audio/
+results/
+interviews/
+*.log
+__pycache__/
