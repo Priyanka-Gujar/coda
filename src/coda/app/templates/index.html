@@ -752,6 +752,31 @@
         border: 1px solid var(--border-warm);
       }
 
+      /* Suggested follow-up questions — rendered under the reasoning block */
+      .inference-questions {
+        margin-top: 12px;
+      }
+      .inference-questions .questions-head {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--ink-muted);
+        margin-bottom: 8px;
+      }
+      .inference-questions ul {
+        margin: 0;
+        padding-left: 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .inference-questions li {
+        font-size: 13px;
+        line-height: 1.5;
+        color: var(--ink-soft);
+      }
+
       .divider {
         border: none;
         border-top: 1px solid var(--border-warm);
@@ -2913,6 +2938,7 @@
           "record.transcript": "Transcript",
           "record.probableCause": "Probable cause",
           "record.differentials": "Differentials",
+          "record.suggestedQuestions": "Suggested follow-up questions",
           "record.updating": "Updating",
           "record.offlinePill": "Offline",
           "record.placeholder":
@@ -2980,6 +3006,7 @@
           "record.transcript": "Maandishi",
           "record.probableCause": "Sababu inayowezekana",
           "record.differentials": "Tofauti",
+          "record.suggestedQuestions": "Maswali ya ufuatiliaji yanayopendekezwa",
           "record.updating": "Inasasisha",
           "record.offlinePill": "Nje ya mtandao",
           "record.placeholder":
@@ -3049,6 +3076,7 @@
           "record.transcript": "Transcription",
           "record.probableCause": "Cause probable",
           "record.differentials": "Diagnostics différentiels",
+          "record.suggestedQuestions": "Questions de suivi suggérées",
           "record.updating": "Mise à jour",
           "record.offlinePill": "Hors ligne",
           "record.placeholder":
@@ -3117,6 +3145,7 @@
           "record.transcript": "النص",
           "record.probableCause": "السبب المحتمل",
           "record.differentials": "التشخيصات التفريقية",
+          "record.suggestedQuestions": "أسئلة متابعة مقترحة",
           "record.updating": "يُحدِّث",
           "record.offlinePill": "غير متصل",
           "record.placeholder":
@@ -3185,6 +3214,7 @@
           "record.transcript": "প্রতিলিপি",
           "record.probableCause": "সম্ভাব্য কারণ",
           "record.differentials": "পৃথকীকরণ",
+          "record.suggestedQuestions": "প্রস্তাবিত অনুসরণমূলক প্রশ্ন",
           "record.updating": "আপডেট হচ্ছে",
           "record.offlinePill": "অফলাইন",
           "record.placeholder":
@@ -3254,6 +3284,7 @@
           "record.transcript": "Transcripción",
           "record.probableCause": "Causa probable",
           "record.differentials": "Diagnósticos diferenciales",
+          "record.suggestedQuestions": "Preguntas de seguimiento sugeridas",
           "record.updating": "Actualizando",
           "record.offlinePill": "Sin conexión",
           "record.placeholder":
@@ -3374,7 +3405,7 @@
       // Render a cause list (ranked, with confidence bars + deltas vs. a
       // previous snapshot). Used for both the live inference panel and the
       // Session Result differentials.
-      function renderCauseList(causes, previousCauses, reasoning) {
+      function renderCauseList(causes, previousCauses, reasoning, questions) {
         const sorted = Object.entries(causes || {}).sort(
           (a, b) => b[1].score - a[1].score,
         );
@@ -3430,6 +3461,16 @@
 
         if (reasoning) {
           html += `<div class="inference-reasoning">${escapeHtml(reasoning)}</div>`;
+        }
+
+        if (questions && questions.length) {
+          html += '<div class="inference-questions">';
+          html += `<div class="questions-head">${escapeHtml(t("record.suggestedQuestions"))}</div>`;
+          html += "<ul>";
+          questions.forEach((q) => {
+            html += `<li>${escapeHtml(q)}</li>`;
+          });
+          html += "</ul></div>";
         }
 
         html += "</div>";
@@ -4572,6 +4613,7 @@
                 latestCauses,
                 previous,
                 data.reasoning,
+                data.questions,
               );
               inference.insertAdjacentHTML("afterbegin", html);
               // Mirror into the main-column differentials container so the
