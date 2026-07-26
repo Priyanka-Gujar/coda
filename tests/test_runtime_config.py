@@ -18,7 +18,6 @@ RUNTIME_ENV_VARS = (
     "RAG_LLM_MODEL",
     "RAG_ONTOLOGY",
     "RAG_USE_RERANKER",
-    "CODA_ONBOARDING_NOTICE_ENABLED",
     "CODA_ONBOARDING_NOTICE_FILE",
     "CODA_ONBOARDING_NOTICE_VERSION",
     "TRANSCRIBER_BACKEND",
@@ -56,8 +55,6 @@ def test_runtime_config_defaults(monkeypatch):
             == runtime_config.DEFAULT_RAG_ONTOLOGY)
     assert (runtime_config.get_rag_use_reranker()
             == runtime_config.DEFAULT_RAG_USE_RERANKER)
-    assert (runtime_config.get_onboarding_notice_enabled()
-            == runtime_config.DEFAULT_ONBOARDING_NOTICE_ENABLED)
     assert (runtime_config.get_onboarding_notice_file()
             == runtime_config.DEFAULT_ONBOARDING_NOTICE_FILE)
     assert (runtime_config.get_onboarding_notice_version()
@@ -87,7 +84,6 @@ def test_runtime_config_env_overrides(monkeypatch):
     monkeypatch.setenv("RAG_LLM_MODEL", "llama3.2")
     monkeypatch.setenv("RAG_ONTOLOGY", "icd11")
     monkeypatch.setenv("RAG_USE_RERANKER", "false")
-    monkeypatch.setenv("CODA_ONBOARDING_NOTICE_ENABLED", "true")
     monkeypatch.setenv(
         "CODA_ONBOARDING_NOTICE_FILE",
         "/home/ubuntu/pages/demo_terms.html",
@@ -111,7 +107,6 @@ def test_runtime_config_env_overrides(monkeypatch):
     assert runtime_config.get_rag_llm_model() == "llama3.2"
     assert runtime_config.get_rag_ontology() == "icd11"
     assert runtime_config.get_rag_use_reranker() is False
-    assert runtime_config.get_onboarding_notice_enabled() is True
     assert (runtime_config.get_onboarding_notice_file()
             == "/home/ubuntu/pages/demo_terms.html")
     assert (runtime_config.get_onboarding_notice_version()

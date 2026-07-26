@@ -17,7 +17,6 @@ DEFAULT_RAG_LLM_MODEL = "gpt-4o-mini"
 DEFAULT_RAG_ONTOLOGY = "icd10"
 DEFAULT_RAG_USE_RERANKER = True
 DEFAULT_RAG_EXTRACTOR_TYPE = "hunflair"
-DEFAULT_ONBOARDING_NOTICE_ENABLED = False
 DEFAULT_ONBOARDING_NOTICE_FILE = ""
 DEFAULT_ONBOARDING_NOTICE_VERSION = "default"
 DEFAULT_TRANSCRIBER_BACKEND = "whisper-livekit"
@@ -141,13 +140,6 @@ def get_rag_use_reranker() -> bool:
 
 def get_rag_extractor_type() -> str:
     return _get_str("RAG_EXTRACTOR_TYPE", DEFAULT_RAG_EXTRACTOR_TYPE)
-
-
-def get_onboarding_notice_enabled() -> bool:
-    return _get_bool(
-        "CODA_ONBOARDING_NOTICE_ENABLED",
-        DEFAULT_ONBOARDING_NOTICE_ENABLED,
-    )
 
 
 def get_onboarding_notice_file() -> str:

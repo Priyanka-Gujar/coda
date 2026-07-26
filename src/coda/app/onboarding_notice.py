@@ -10,19 +10,13 @@ NOTICE_PLACEHOLDER = "<!-- CODA_ONBOARDING_NOTICE -->"
 VERSION_PLACEHOLDER = "__CODA_ONBOARDING_NOTICE_VERSION__"
 
 
-def load_onboarding_notice_html(enabled: bool, file_path: str) -> str:
-    """Return trusted admin-authored notice HTML, or empty string if disabled.
+def load_onboarding_notice_html(file_path: str) -> str:
+    """Return trusted admin-authored notice HTML, or empty string if unset.
 
     The notice file is intended for deployment-owned content such as demo terms.
     It is inserted as HTML and should not contain user-generated input.
     """
-    if not enabled:
-        return ""
     if not file_path.strip():
-        logger.warning(
-            "CODA_ONBOARDING_NOTICE_ENABLED is true but "
-            "CODA_ONBOARDING_NOTICE_FILE is unset"
-        )
         return ""
 
     path = Path(file_path)

@@ -8,18 +8,15 @@ from coda.app.onboarding_notice import (
 )
 
 
-def test_load_onboarding_notice_disabled_ignores_file_path(tmp_path):
+def test_load_onboarding_notice_unset_file_returns_empty():
+    assert load_onboarding_notice_html("") == ""
+
+
+def test_load_onboarding_notice_reads_file(tmp_path):
     notice_file = tmp_path / "notice.html"
     notice_file.write_text("<section>Demo terms</section>", encoding="utf-8")
 
-    assert load_onboarding_notice_html(False, str(notice_file)) == ""
-
-
-def test_load_onboarding_notice_reads_enabled_file(tmp_path):
-    notice_file = tmp_path / "notice.html"
-    notice_file.write_text("<section>Demo terms</section>", encoding="utf-8")
-
-    assert load_onboarding_notice_html(True, str(notice_file)) == (
+    assert load_onboarding_notice_html(str(notice_file)) == (
         "<section>Demo terms</section>"
     )
 
@@ -27,7 +24,7 @@ def test_load_onboarding_notice_reads_enabled_file(tmp_path):
 def test_load_onboarding_notice_missing_file_logs_warning(caplog):
     caplog.set_level(logging.WARNING)
 
-    assert load_onboarding_notice_html(True, "/tmp/does-not-exist.html") == ""
+    assert load_onboarding_notice_html("/tmp/does-not-exist.html") == ""
     assert "Could not read onboarding notice file" in caplog.text
 
 

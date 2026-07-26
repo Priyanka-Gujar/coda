@@ -46,7 +46,6 @@ from coda.runtime_config import (
     get_inference_llm_model,
     get_inference_llm_provider,
     get_inference_url,
-    get_onboarding_notice_enabled,
     get_onboarding_notice_file,
     get_onboarding_notice_version,
     get_rag_extractor_type,
@@ -702,7 +701,6 @@ async def get_index():
     with open(os.path.join(templates_dir, "index.html"), "r") as fh:
         html_content = fh.read()
     notice_html = load_onboarding_notice_html(
-        get_onboarding_notice_enabled(),
         get_onboarding_notice_file(),
     )
     html_content = render_onboarding_notice(
