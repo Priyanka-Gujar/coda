@@ -43,7 +43,7 @@ def slug(s):
     return s.replace(":", "-").replace("/", "-")
 
 
-# ------------------------------------------------------------------ transcription
+# Transcription
 
 async def transcribe(transcriber, audio_i16, mode):
     """Transcribe audio into cache segments: whole-file is one segment, chunked is one
@@ -87,7 +87,7 @@ async def get_segments(cache_file, input_path, mode, retranscribe, transcriber_h
     return segs
 
 
-# --------------------------------------------------------------------- inference
+# Inference
 
 async def infer(segments, provider, model):
     """Replay transcript segments through the CHAMPS agent, timing each inference."""
@@ -103,7 +103,7 @@ async def infer(segments, provider, model):
     return agent.all_text.strip(), per_chunk
 
 
-# -------------------------------------------------------------------------- main
+# Main
 
 async def run(args):
     cache_root = HERE / "transcripts" / f"{slug(TRANSCRIBER)}-{slug(WHISPER_MODEL)}"

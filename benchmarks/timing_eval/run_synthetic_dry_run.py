@@ -51,7 +51,7 @@ CHUNK_SECONDS = 20.0
 THRESHOLD = 0.75
 
 
-# --------------------------------------------------------------------------- audio
+# Audio
 
 def _say_to_wav(text: str, out_path: Path):
     """Render text to a 16kHz mono WAV via macOS `say` + ffmpeg (Whisper's format)."""
@@ -100,7 +100,7 @@ def ensure_audio(case: dict, audio_dir: Path, regenerate: bool) -> dict:
     }
 
 
-# ----------------------------------------------------------------------------- run
+# Run
 
 def parse_llm_spec(spec: str):
     """('toy', None, None) for the toy agent, else ('champs', provider, model)."""
@@ -133,7 +133,7 @@ def run_cli(audio_path: Path, out_dir: Path, whisper_model: str, llm_spec: str):
     subprocess.run(cmd, env=env, cwd=str(REPO_ROOT), check=True)
 
 
-# ------------------------------------------------------------------------- analysis
+# Analysis
 
 def trajectory(out_dir: Path):
     """Read chunks.jsonl into [(audio_elapsed_s, top_cause, top_score), ...]."""
@@ -167,7 +167,7 @@ def final_call(traj):
     return cause, score
 
 
-# ------------------------------------------------------------------------------ main
+# Main
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__,

@@ -39,7 +39,7 @@ def ref_types(k):
     return [(name, TRUTH[k][name]) for name in order if name in TRUTH[k]]
 
 
-# ------------------------------------------------------ accuracy vs spoken time
+# Accuracy vs spoken time
 
 def chunk_points(root, k, phase):
     """[(elapsed_s, top1_correct, top3_correct)] over a case's chunks."""
@@ -117,7 +117,7 @@ def write_accuracy_png():
     print(f"wrote {out}")
 
 
-# ------------------------------------------------------- per-case table + HTML
+# Per-case table + HTML
 
 def whole_top(path, n=3):
     if not path.exists():
