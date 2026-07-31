@@ -52,13 +52,14 @@ def _load_backend_class(backend: str):
     )
 
 
-def create_transcriber(backend: str = None, model: str = None):
+def create_transcriber(backend: str = None, model: str = None, **kwargs):
     """Build a Transcriber for the named backend, optionally with a model.
 
-    Defaults to the TRANSCRIBER_BACKEND env var.
+    Extra kwargs are forwarded to the backend's create(). Defaults to the
+    TRANSCRIBER_BACKEND env var.
     """
     backend = (backend or get_transcriber_backend()).lower()
-    return _load_backend_class(backend).create(model=model)
+    return _load_backend_class(backend).create(model=model, **kwargs)
 
 
 def get_transcriber_models(backend: str) -> dict:

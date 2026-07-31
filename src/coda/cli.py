@@ -226,6 +226,7 @@ def write_outputs(output_dir: Path, full_text: str, per_chunk: list, meta: dict)
                 "annotations": [a.to_json() for a in anns],
                 "causes": inf.get("causes", {}),
                 "reasoning": inf.get("reasoning"),
+                "questions": inf.get("questions", []),
                 "timing": timings,
             }) + "\n")
 
@@ -253,6 +254,7 @@ def write_outputs(output_dir: Path, full_text: str, per_chunk: list, meta: dict)
         "timing": timing,
         "causes": final.get("causes", {}),
         "reasoning": final.get("reasoning"),
+        "questions": final.get("questions", []),
         "chunks_processed": final.get("chunks_processed"),
     }, indent=2))
 
@@ -318,6 +320,9 @@ def main():
                              "for batch files).")
     parser.add_argument("--whisper-model", default=DEFAULT_MODEL_SIZE,
                         help=f"Whisper model size (default: {DEFAULT_MODEL_SIZE})")
+    parser.add_argument("--no-speech-threshold", type=float, default=None,
+                        help="no_speech_prob above which a segment is dropped as silence "
+                             "(Whisper backends). 1.0 keeps all segments.")
     parser.add_argument("--language", default="en", help="Spoken language (default: en)")
     parser.add_argument("--task", choices=["transcribe", "translate"], default="transcribe",
                         help="transcribe in language, or translate speech to English")
@@ -353,8 +358,11 @@ def main():
             **common_meta,
         }
     else:
+        transcriber_kwargs = {}
+        if args.no_speech_threshold is not None:
+            transcriber_kwargs["no_speech_threshold"] = args.no_speech_threshold
         transcriber = create_transcriber(
-            args.transcriber, model=args.whisper_model
+            args.transcriber, model=args.whisper_model, **transcriber_kwargs
         )
         print(f"Loading audio: {args.input}")
         audio_i16 = load_audio_int16(args.input)
