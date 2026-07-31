@@ -1,0 +1,136 @@
+{
+  "1": {
+    "Underlying Cause": [
+      "Perinatal asphyxia/hypoxia"
+    ]
+  },
+  "2": {
+    "Underlying Cause": [
+      "Neonatal preterm birth complications"
+    ]
+  },
+  "3": {
+    "Underlying Cause": [
+      "Neonatal preterm birth complications"
+    ],
+    "Immediate Cause of Death": [
+      "Neonatal sepsis"
+    ],
+    "Morbid Conditions": [
+      "Neonatal preterm birth complications"
+    ]
+  },
+  "4": {
+    "Underlying Cause": [
+      "Neonatal preterm birth complications"
+    ]
+  },
+  "5": {
+    "Underlying Cause": [
+      "Perinatal asphyxia/hypoxia"
+    ],
+    "Immediate Cause of Death": [
+      "Sepsis"
+    ]
+  },
+  "6": {
+    "Underlying Cause": [
+      "Malaria"
+    ]
+  },
+  "7": {
+    "Underlying Cause": [
+      "Malaria"
+    ]
+  },
+  "8": {
+    "Underlying Cause": [
+      "Malaria"
+    ]
+  },
+  "9": {
+    "Underlying Cause": [
+      "Sepsis"
+    ]
+  },
+  "10": {
+    "Underlying Cause": [
+      "Sepsis"
+    ],
+    "Immediate Cause of Death": [
+      "Lower respiratory infections"
+    ],
+    "Morbid Conditions": [
+      "Malaria",
+      "Other endocrine, metabolic, blood, and immune disorders"
+    ]
+  },
+  "11": {
+    "Underlying Cause": [
+      "Sepsis"
+    ],
+    "Immediate Cause of Death": [
+      "Lower respiratory infections"
+    ]
+  },
+  "12": {
+    "Underlying Cause": [
+      "Malaria"
+    ],
+    "Immediate Cause of Death": [
+      "Other endocrine, metabolic, blood, and immune disorders"
+    ]
+  },
+  "13": {
+    "Underlying Cause": [
+      "Malaria"
+    ],
+    "Immediate Cause of Death": [
+      "Other endocrine, metabolic, blood, and immune disorders"
+    ]
+  },
+  "14": {
+    "Underlying Cause": [
+      "Malaria"
+    ]
+  },
+  "15": {
+    "Underlying Cause": [
+      "Lower respiratory infections"
+    ],
+    "Immediate Cause of Death": [
+      "Meningitis/Encephalitis"
+    ]
+  },
+  "16": {
+    "Underlying Cause": [
+      "Injury"
+    ],
+    "Immediate Cause of Death": [
+      "Sepsis"
+    ],
+    "Morbid Conditions": [
+      "Anemias"
+    ]
+  },
+  "17": {
+    "Underlying Cause": [
+      "Poisoning"
+    ]
+  },
+  "18": {
+    "Underlying Cause": [
+      "Undetermined"
+    ]
+  },
+  "19": {
+    "Underlying Cause": [
+      "Undetermined"
+    ]
+  },
+  "20": {
+    "Underlying Cause": [
+      "Undetermined"
+    ]
+  }
+}

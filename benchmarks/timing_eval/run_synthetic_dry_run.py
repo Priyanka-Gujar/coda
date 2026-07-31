@@ -1,9 +1,12 @@
-"""CODA prototype time study: how long must someone talk before CODA is confident?
+"""Synthetic dry run of the CODA time study (no real recordings needed).
 
-For each synthetic case (cases.json) this synthesizes spoken audio, feeds it to the
-CODA CLI in live-style 20s chunks, and records the top cause-of-death confidence as
-the spoken "wall clock" advances. The headline number per case is the spoken time at
-which the top cause first crosses the confidence threshold (default 0.75).
+For each synthetic case (synthetic_dry_run_cases.json) this synthesizes spoken audio,
+feeds it to the CODA CLI in live-style 20s chunks, and records the top cause-of-death
+confidence as the spoken "wall clock" advances. The headline number per case is the
+spoken time at which the top cause first crosses the confidence threshold (default 0.75).
+
+This is the plumbing/dry-run counterpart to the real-recording evaluation in
+run_real_cases.py; it needs no audio files, only macOS `say` to synthesize them.
 
 Two phases mirror the study protocol:
   Phase 1 - VA narrative only          (audio = <case>_va.wav)
@@ -17,15 +20,15 @@ The evaluation runs over a matrix of (Whisper model x inference LLM). LLM specs 
 Usage
 -----
     # default matrix: gpt-oss:20b (Ollama) x Whisper small
-    python benchmarks/timing_eval/run_timing_eval.py
+    python benchmarks/timing_eval/run_synthetic_dry_run.py
 
     # custom matrix
-    python benchmarks/timing_eval/run_timing_eval.py \
+    python benchmarks/timing_eval/run_synthetic_dry_run.py \
         --whisper-models small,medium \
         --llm-models "ollama:gpt-oss:20b,openai:gpt-4o-mini"
 
     # fast plumbing check, no LLM/Ollama needed
-    python benchmarks/timing_eval/run_timing_eval.py --whisper-models tiny --llm-models toy
+    python benchmarks/timing_eval/run_synthetic_dry_run.py --whisper-models tiny --llm-models toy
 
 Requires macOS `say` and `ffmpeg` on PATH for speech synthesis.
 """
@@ -176,8 +179,8 @@ def main():
                              "(default: ollama:gpt-oss:20b)")
     parser.add_argument("--threshold", type=float, default=THRESHOLD,
                         help=f"Confidence threshold for ascertainment (default: {THRESHOLD})")
-    parser.add_argument("--cases", default=str(HERE / "cases.json"),
-                        help="Path to cases.json")
+    parser.add_argument("--cases", default=str(HERE / "synthetic_dry_run_cases.json"),
+                        help="Path to the synthetic cases JSON")
     parser.add_argument("--output", default=str(HERE / "results"),
                         help="Output root for per-run results and summary")
     parser.add_argument("--regenerate-audio", action="store_true",
