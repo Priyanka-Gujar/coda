@@ -25,8 +25,8 @@ class WhisperTranscriber(ChunkedTranscriber):
     DEFAULT_MODEL = DEFAULT_MODEL_SIZE
 
     @classmethod
-    def create(cls, model=None):
-        return cls(model_size=model or cls.DEFAULT_MODEL)
+    def create(cls, model=None, **kwargs):
+        return cls(model_size=model or cls.DEFAULT_MODEL, **kwargs)
 
     def __init__(self, model_size: str = DEFAULT_MODEL_SIZE,
                  no_speech_threshold: float = None):

@@ -1,4 +1,5 @@
 ## GUIDANCE
+- For each top cause, output probability as a calibrated value between 0 and 1 (not a rank), and make the probabilities across the top causes sum to approximately 1.
 - Output the exact cause name from the allowed causes list, preserving capitalization and wording. Do not paraphrase or lowercase.
 - Choose Malaria only with lab-confirmed malaria or strong classic malaria signs; do not default to malaria for fever alone or incidental TAC findings.
 - If severe malnutrition is evident (e.g., MUAC < 11.5 cm in 6-59 months or very low weight-for-age/height), Malnutrition should be top-1. Only override for clear trauma or congenital primary causes.

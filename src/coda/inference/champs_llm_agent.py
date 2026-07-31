@@ -73,7 +73,11 @@ COD_OUTPUT_SCHEMA = {
                 "type": "object",
                 "properties": {
                     "cause_name": {"type": "string"},
-                    "probability": {"type": "number"},
+                    "probability": {
+                        "type": "number", "minimum": 0, "maximum": 1,
+                        "description": "Calibrated probability in [0,1]; the "
+                                       "top_causes probabilities should sum to ~1.",
+                    },
                 },
                 "required": ["cause_name", "probability"],
                 "additionalProperties": False,
@@ -132,7 +136,6 @@ class ChampsLLMInferenceAgent(InferenceAgent):
             user_prompt = ''
         user_prompt += (
             f"## INPUT\n"
-            f"- case_id: {chunk_id}\n"
             f"- narrative:\n"
             f"  {self.all_text.strip()}"
         )
@@ -214,6 +217,11 @@ class ChampsLLMInferenceAgent(InferenceAgent):
                 "identifiers": {"icd10": icd10},
                 "score": probability,
             }
+
+        total = sum(c["score"] for c in causes.values())
+        if total > 0:
+            for c in causes.values():
+                c["score"] = round(c["score"] / total, 4)
 
         reasoning = response.get("reasoning", "")
         questions = response.get("questions", [])
