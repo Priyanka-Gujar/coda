@@ -3,7 +3,7 @@
 How long must someone talk before CODA reaches a cause-of-death call, and
 how does accuracy build as a verbal-autopsy (VA) narrative and then clinical data are heard? This folder holds two evaluations:
 
-- **Real CHAMPS recordings** (`run_eval.py` and friends) - the main study.
+- **Recordings based on Real CHAMPS cases** (`run_eval.py` and friends) - the main study.
 - **Synthetic dry run** (`run_synthetic_dry_run.py`) - a no-audio plumbing check that synthesizes speech from `synthetic_dry_run_cases.json` via macOS `say`.
 
 Only scripts and small metadata are version-controlled. Audio recordings and all
@@ -16,8 +16,6 @@ generated outputs are gitignored (see `.gitignore`).
   re-transcribe.
 - Inference: CHAMPS LLM agent via Ollama, model chosen with `--model` (e.g.
   `qwen2.5:7b-instruct`, `gpt-oss:20b`).
-- Grounding is skipped: the CHAMPS agent infers from text only, so gilda annotations
-  would not change the result.
 
 Requirements: `ffmpeg` on PATH, a running Ollama with the chosen model(s) pulled, and
 the project installed (or its `src/` on `PYTHONPATH`; `run_eval.py` adds it itself).
@@ -54,9 +52,8 @@ python run_eval.py --model gpt-oss:20b         --out real_cases_results_gptoss
 #    (needs the dossier HTML in real_cases/):
 python extract_true_labels.py
 
-# 4. Report -> real_cases_report/
-python make_accuracy_curve.py     # accuracy_over_time.png
-python make_final_report.py       # index.html + final_predictions.csv
+# 4. Report -> real_cases_report/ (accuracy_over_time.png, final_predictions.csv, index.html)
+python make_report.py
 ```
 
 `run_eval.py` is resumable: a completed run writes `inference.json`, and re-running
