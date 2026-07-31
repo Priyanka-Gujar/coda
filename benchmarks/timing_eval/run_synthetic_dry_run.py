@@ -6,7 +6,7 @@ confidence as the spoken "wall clock" advances. The headline number per case is 
 spoken time at which the top cause first crosses the confidence threshold (default 0.75).
 
 This is the plumbing/dry-run counterpart to the real-recording evaluation in
-run_real_cases.py; it needs no audio files, only macOS `say` to synthesize them.
+run_eval.py; it needs no audio files, only macOS `say` to synthesize them.
 
 Two phases mirror the study protocol:
   Phase 1 - VA narrative only          (audio = <case>_va.wav)
