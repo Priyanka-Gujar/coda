@@ -110,7 +110,7 @@ async def infer(segments, provider, model):
 
 async def run(args):
     cache_root = HERE / "transcripts" / f"{slug(TRANSCRIBER)}-{slug(WHISPER_MODEL)}"
-    out_root = Path(args.out) / slug(args.model)
+    out_root = Path(args.out) / slug(args.model) if args.model else None
     cases = load_cases()
     case_ids = args.only or sorted(cases, key=int)
     phases = [p for p in args.phases.split(",") if p]
@@ -134,16 +134,19 @@ async def run(args):
             if phase not in inputs:
                 continue
             for mode in modes:
-                out_dir = out_root / f"case{cid}" / PHASE_DIRS[phase] / mode
                 total += 1
-                print(f"=== [{total}] case{cid} {PHASE_DIRS[phase]} {mode}  ({args.model})")
-                if (out_dir / "inference.json").exists() and not args.force:
+                print(f"=== [{total}] case{cid} {PHASE_DIRS[phase]} {mode}  "
+                      f"({args.model or 'transcribe-only'})")
+                out_dir = out_root / f"case{cid}" / PHASE_DIRS[phase] / mode if out_root else None
+                if out_dir and (out_dir / "inference.json").exists() and not args.force:
                     print("    skip (already done)")
                     continue
                 cache_file = cache_root / f"case{cid}" / PHASE_DIRS[phase] / f"{mode}.json"
                 try:
                     segs = await get_segments(cache_file, inputs[phase], mode,
                                               args.retranscribe, transcriber_holder)
+                    if args.transcribe_only:
+                        continue
                     full_text, per_chunk = await infer(segs, args.provider, args.model)
                 except Exception as e:
                     failed += 1
@@ -167,7 +170,9 @@ async def run(args):
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--model", required=True, help="Inference model (e.g. qwen2.5:7b-instruct)")
+    ap.add_argument("--model", help="Inference model (e.g. qwen2.5:7b-instruct)")
+    ap.add_argument("--transcribe-only", action="store_true",
+                    help="Populate the transcript cache and skip inference")
     ap.add_argument("--provider", default=PROVIDER)
     ap.add_argument("--out", default="real_cases_results",
                     help="Results root, each model gets its own <out>/<model>/ subfolder")
@@ -179,6 +184,8 @@ def main():
     ap.add_argument("--retranscribe", action="store_true",
                     help="Ignore the transcript cache and transcribe again")
     args = ap.parse_args()
+    if not args.transcribe_only and not args.model:
+        ap.error("--model is required unless --transcribe-only")
     sys.exit(asyncio.run(run(args)))
 
 
