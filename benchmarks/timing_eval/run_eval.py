@@ -9,8 +9,11 @@ Each (case, phase, mode) is transcribed once (whole-file and 20s-chunked) and in
 with the chosen model. Phase 1 is the VA narrative; phase 2 is VA followed by the
 clinical narrative (combined audio), run so the agent carries VA context into it.
 
-    python run_eval.py --model qwen2.5:7b-instruct --out real_cases_results
-    python run_eval.py --model gpt-oss:20b        --out real_cases_results_gptoss
+    python run_eval.py --model qwen2.5:7b-instruct
+    python run_eval.py --model gpt-oss:20b
+
+Results are written to real_cases_results/<model>/, one subfolder per model, so the
+report can compare every model that has been run.
 """
 import argparse
 import asyncio
@@ -107,7 +110,7 @@ async def infer(segments, provider, model):
 
 async def run(args):
     cache_root = HERE / "transcripts" / f"{slug(TRANSCRIBER)}-{slug(WHISPER_MODEL)}"
-    out_root = Path(args.out)
+    out_root = Path(args.out) / slug(args.model)
     cases = load_cases()
     case_ids = args.only or sorted(cases, key=int)
     phases = [p for p in args.phases.split(",") if p]
@@ -166,7 +169,8 @@ def main():
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--model", required=True, help="Inference model (e.g. qwen2.5:7b-instruct)")
     ap.add_argument("--provider", default=PROVIDER)
-    ap.add_argument("--out", required=True, help="Results dir (per model, kept separate)")
+    ap.add_argument("--out", default="real_cases_results",
+                    help="Results root, each model gets its own <out>/<model>/ subfolder")
     ap.add_argument("--only", nargs="*", default=None, help="Case ids (default: all)")
     ap.add_argument("--phases", default="va,combined")
     ap.add_argument("--modes", default=",".join(MODES))

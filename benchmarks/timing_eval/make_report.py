@@ -1,6 +1,7 @@
 """Build the timing-eval report into real_cases_report/:
 
-  accuracy_over_time.png  aggregate top-1/top-3 accuracy vs spoken time (both models)
+  accuracy_over_time.png  aggregate top-1/top-3 accuracy vs spoken time (all models
+                          found under real_cases_results/)
   final_predictions.csv   whole-file top-1/top-3 vs reference causes, plus timing
   index.html              the plot + per-case reference causes, final predictions,
                           reasoning, and follow-up questions (VA vs VA+clinical)
@@ -16,17 +17,36 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 HERE = Path(__file__).parent
-RESULTS = HERE / "real_cases_results"
-RESULTS_GPTOSS = HERE / "real_cases_results_gptoss"
+RESULTS_ROOT = HERE / "real_cases_results"
 REPORT = HERE / "real_cases_report"
 TRUTH = json.loads((HERE / "real_cases" / "true_labels_group.json").read_text())
 CASES = sorted(TRUTH, key=int)
 
 SURFACE, INK, MUTED, GRID = "#fcfcfb", "#0b0b0b", "#52514e", "#e6e5e2"
 C_TOP1, C_TOP3 = "#2a78d6", "#eb6834"
-MODELS = [("qwen2.5:7b", RESULTS, "-"), ("gpt-oss:20b", RESULTS_GPTOSS, "--")]
+LINESTYLES = ["-", "--", "-.", ":"]
 PHASES = [("phase1_va", "VA narrative only"),
           ("phase2_va_clinical", "VA + clinical")]
+
+
+def discover_models(root):
+    """Every model under the results root as [(name, dir, linestyle)], sorted by
+    name. A model is any subfolder that holds case* directories."""
+    if not root.exists():
+        return []
+    dirs = sorted((d for d in root.iterdir() if d.is_dir() and any(d.glob("case*"))),
+                  key=lambda d: d.name)
+    return [(d.name, d, LINESTYLES[i % len(LINESTYLES)]) for i, d in enumerate(dirs)]
+
+
+MODELS = discover_models(RESULTS_ROOT)
+
+
+def ref_dir():
+    """A model dir to read model-independent fields from (audio length,
+    transcription time). These match across models because the transcript cache
+    is shared, so the first model is as good as any."""
+    return MODELS[0][1] if MODELS else None
 
 
 def ref_cause(k):
@@ -54,7 +74,7 @@ def chunk_points(root, k, phase):
 
 
 def va_duration(k):
-    p = RESULTS / f"case{k}" / "phase1_va" / "whole" / "inference.json"
+    p = ref_dir() / f"case{k}" / "phase1_va" / "whole" / "inference.json"
     return json.loads(p.read_text()).get("audio_duration_s")
 
 
@@ -79,7 +99,7 @@ def phase_curves(root, phase, grid):
 
 
 def phase_grid(phase):
-    tmax = max(chunk_points(RESULTS, k, phase)[-1][0] for k in CASES)
+    tmax = max(chunk_points(ref_dir(), k, phase)[-1][0] for k in CASES)
     return np.arange(0, tmax + 1, 1.0)
 
 
@@ -159,44 +179,53 @@ def write_table():
     out = REPORT / "final_predictions.csv"
     with out.open("w", newline="") as fh:
         w = csv.writer(fh)
-        w.writerow(["case", "underlying", "immediate", "morbid_conditions",
+        w.writerow(["model", "case", "underlying", "immediate", "morbid_conditions",
                     "va_top1", "va_top3", "combined_top1", "combined_top3",
                     "va_audio_s", "va_processing_s",
                     "combined_audio_s", "combined_processing_s"])
-        for k in CASES:
-            t = TRUTH[k]
-            va_p = RESULTS / f"case{k}" / "phase1_va" / "whole" / "inference.json"
-            cm_p = RESULTS / f"case{k}" / "phase2_va_clinical" / "whole" / "inference.json"
-            va, cm = whole_top(va_p), whole_top(cm_p)
-            va_audio, _, va_proc = whole_timing(va_p)
-            cm_audio, _, cm_proc = whole_timing(cm_p)
-            w.writerow([k,
-                        "; ".join(t.get("Underlying Cause", [])),
-                        "; ".join(t.get("Immediate Cause of Death", [])),
-                        "; ".join(t.get("Morbid Conditions", [])),
-                        va[0] if va else "-", " | ".join(va),
-                        cm[0] if cm else "-", " | ".join(cm),
-                        va_audio, va_proc, cm_audio, cm_proc])
+        for name, mdir, _ in MODELS:
+            for k in CASES:
+                t = TRUTH[k]
+                va_p = mdir / f"case{k}" / "phase1_va" / "whole" / "inference.json"
+                cm_p = mdir / f"case{k}" / "phase2_va_clinical" / "whole" / "inference.json"
+                va, cm = whole_top(va_p), whole_top(cm_p)
+                va_audio, _, va_proc = whole_timing(va_p)
+                cm_audio, _, cm_proc = whole_timing(cm_p)
+                w.writerow([name, k,
+                            "; ".join(t.get("Underlying Cause", [])),
+                            "; ".join(t.get("Immediate Cause of Death", [])),
+                            "; ".join(t.get("Morbid Conditions", [])),
+                            va[0] if va else "-", " | ".join(va),
+                            cm[0] if cm else "-", " | ".join(cm),
+                            va_audio, va_proc, cm_audio, cm_proc])
     print(f"wrote {out}")
 
 
-def phase_block(title, k, phase):
-    d = chunk_final(RESULTS_GPTOSS / f"case{k}" / phase / "chunked")
-    audio_s, trans_s, _ = whole_timing(RESULTS / f"case{k}" / phase / "whole" / "inference.json")
+def model_detail(name, mdir, k, phase):
+    d = chunk_final(mdir / f"case{k}" / phase / "chunked")
     top3 = ", ".join(f"{html.escape(n)} ({s:.2f})" for n, s in d["top3"]) or "-"
     qs = "".join(f"<li>{html.escape(q)}</li>" for q in d["questions"])
-    audio = f"{audio_s:.0f}s" if audio_s is not None else "-"
-    trans = f"{trans_s:.0f}s" if trans_s is not None else "-"
     infer = f"{d['infer_s']:.1f}s" if d["infer_s"] is not None else "-"
-    return (f"<div class='phase'><h3>{title}</h3>"
-            f"<p class='timing'>Audio duration: {audio}, CODA processing time: "
-            f"{trans} transcription / {infer} inference</p>"
+    return (f"<div class='model'><p class='mname'>{html.escape(name)} "
+            f"<span class='timing'>({infer} inference)</span></p>"
             f"<p class='top'><b>Final top-3:</b> {top3}</p>"
             f"<p class='reason'>{html.escape(d['reasoning'])}</p>"
             f"<b style='font-size:13px'>Follow-up questions</b><ul>{qs}</ul></div>")
 
 
+def phase_block(title, k, phase):
+    audio_s, trans_s, _ = whole_timing(
+        ref_dir() / f"case{k}" / phase / "whole" / "inference.json")
+    audio = f"{audio_s:.0f}s" if audio_s is not None else "-"
+    trans = f"{trans_s:.0f}s" if trans_s is not None else "-"
+    details = "".join(model_detail(name, mdir, k, phase) for name, mdir, _ in MODELS)
+    return (f"<div class='phase'><h3>{title}</h3>"
+            f"<p class='timing'>Audio duration: {audio}, transcription: {trans}</p>"
+            f"{details}</div>")
+
+
 def write_index():
+    model_names = ", ".join(name for name, _, _ in MODELS)
     parts = ["<!doctype html><html><head><meta charset='utf-8'>",
              "<title>CODA timing evaluation on CHAMPS cases</title>",
              "<style>",
@@ -218,12 +247,14 @@ def write_index():
              ".phase .top{font-size:13px;color:#0b0b0b;margin:0 0 8px}",
              ".phase .reason{font-size:13px;color:#52514e;margin:0 0 8px}",
              ".phase ul{margin:0;padding-left:18px;font-size:13px;color:#52514e}",
+             ".phase .model{border-top:1px solid #e6e5e2;margin-top:8px;padding-top:8px}",
+             ".phase .mname{font-size:13px;font-weight:600;margin:0 0 4px}",
              ".overview{padding:20px 0;border-bottom:1px solid #e6e5e2}",
              ".overview img{max-width:100%;height:auto}",
              ".overview p{max-width:1100px;color:#52514e;font-size:14px;margin:0 0 10px}",
              "</style></head><body>",
-             "<header><b>CODA timing evaluation on CHAMPS cases</b> — reference causes vs final "
-             "prediction (gpt-oss:20b inference, faster-whisper medium transcription, gilda).",
+             "<header><b>CODA timing evaluation on CHAMPS cases</b>, reference causes vs final "
+             f"prediction ({model_names} inference, faster-whisper medium transcription, gilda).",
              "<nav>" + " ".join(f"<a href='#c{k}'>#{k}</a>" for k in CASES) + "</nav></header>",
              "<main>",
              "<div class='overview'><h2>Accuracy vs spoken time (n=20)</h2>"
@@ -249,6 +280,8 @@ def write_index():
 
 
 def main():
+    if not MODELS:
+        raise SystemExit(f"No model results under {RESULTS_ROOT}. Run run_eval.py first.")
     REPORT.mkdir(exist_ok=True)
     write_accuracy_png()
     write_table()

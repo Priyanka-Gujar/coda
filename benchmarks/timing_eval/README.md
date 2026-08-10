@@ -44,15 +44,18 @@ python make_combined.py
 
 # 2. Transcribe (faster-whisper medium, cached) and infer, once per model. VA then
 #    combined, whole-file and 20s-chunked. The second model reuses the cached
-#    transcripts, so it does not re-transcribe.
-python run_eval.py --model qwen2.5:7b-instruct --out real_cases_results
-python run_eval.py --model gpt-oss:20b         --out real_cases_results_gptoss
+#    transcripts, so it does not re-transcribe. Each model writes to its own
+#    real_cases_results/<model>/ subfolder.
+python run_eval.py --model qwen2.5:7b-instruct
+python run_eval.py --model gpt-oss:20b
 
 # 3. Ground-truth labels: true_labels_group.json is committed. To regenerate it
 #    (needs the dossier HTML in real_cases/):
 python extract_true_labels.py
 
-# 4. Report -> real_cases_report/ (accuracy_over_time.png, final_predictions.csv, index.html)
+# 4. Report -> real_cases_report/ (accuracy_over_time.png, final_predictions.csv, index.html).
+#    make_report.py discovers every model under real_cases_results/, so it compares
+#    however many you have run (one or many).
 python make_report.py
 ```
 
